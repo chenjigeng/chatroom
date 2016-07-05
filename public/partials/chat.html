@@ -1,21 +1,35 @@
 <div layout="row" class="chat">
-	<md-content flex="30">
-		<md-list flex>
-			<md-subheader class="md-no-sticky">在线用户</md-subheader>
-			<md-list-item class="md-1-line" ng-repeat="user in allUsers" ng-if="user!=nickname" ng-click="chatwith(user)">
-				<img ng-src="img/1.jpg" class="md-avatar" ng-if="user!=nickname"/>
-				<div class='md-title' ng-if="user!=nickname">{{user}}</div>
-			</md-list-item>
-		</md-list>
+	<md-content flex="30" class="onlineuser">
+		<md-toolbar layout="row" class="md-hue-1 tool">
+			<div class="md-toolbar-tools">
+				<span>在线用户</span>
+			</div>
+		</md-toolbar>
+		<md-content class="chat-room">
+			<md-list flex>
+				<md-list-item class="md-1-line" ng-repeat="user in allUsers" ng-if="user!=nickname" ng-click="chatwith(user)">
+					<img ng-src="img/1.jpg" class="md-avatar" ng-if="user!=nickname"/>
+					<div class='md-title' ng-if="user!=nickname">{{user}}</div>
+				</md-list-item>
+			</md-list>
+		</md-content>
 	</md-content>
-	<md-content layout-padding flex="60">
-		<md-toolbar layout="row" class="md-hue-3">
+	<md-content flex="60" layout="column">
+		<md-toolbar layout="row" class="md-hue-1">
 			<div class="md-toolbar-tools">
 				<span>聊天室</span>
 			</div>
 		</md-toolbar>
-		<div class="chat-room">
-			<md-list flex layout="column">
+		<div class="chat-room" flex="75">
+			<ul ng-repeat="mess in messages track by $index">
+				<div layout="column">
+					<div class="md-title message"> 
+						{{mess.nickname}}:
+						<span > {{mess.message }} </span>
+					</div>
+				</div>
+			</ul>	
+<!-- 			<md-list flex layout="column">
 		      <md-list-item class="md-1-line"ng-repeat="mess in messages track by $index">
 		      	<div layout="column">
 		      		<h3>{{ mess.nickname }}:
@@ -23,13 +37,15 @@
 		        	</h3>
 		        </div>
 		    	</md-list-item>
-		  </md-list>
+		  </md-list> -->
 		</div>
-	  <md-input-container>
-			<label>信息</label>
-			<input ng-model="message" />
-		</md-input-container>
-		<md-button ng-click="send()" class="md-primary md-raised">确定</md-button>
+		<div flex layout="row" class="submit" flex="10">
+		  <md-input-container flex="80">
+				<label>信息</label>
+				<input ng-model="message" />
+			</md-input-container>
+			<md-button flex ng-click="send()" class="md-primary md-raised sure">确定</md-button>
+		</div>
 	</md-content>
 </div>
 

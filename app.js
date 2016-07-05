@@ -20,22 +20,27 @@ io.on('connection',function(socket){
   	}
   	else {
   		console.log("success");
-  		sockets[data.nickname] = socket;
   		allUsers.push(data.nickname);
   		callback({result: true, allUsers: allUsers});
+      socket.nickname=data.nickname;
+      sockets[data.nickname] = socket;
   		socket.broadcast.emit("Message", {message: "有新用户进入聊天室", nickname: data.nickname, allUsers: allUsers});
   }});
  
   socket.on('addMessage',function(data){ //有用户发送新消息
-  	console.log("enter socket");
-    if (data.received) {
-      sockets[data.received].emit("Message", data);
-    }
   	socket.broadcast.emit("Message", data);
   });
    
   socket.on('disconnect', function () { //有用户退出聊天室
-  	console.log("leave");
+  	socket.broadcast.emit("userRemoved", {
+      nickname: socket.nickname
+    })
+    for (var i = 0; i < allUsers.length; i++)
+      if (allUsers[i] == socket.nickname) {
+        allUsers.splice(i, 1);
+        break;
+      }
+    delete sockets[socket.nickname]
   });
 });
  

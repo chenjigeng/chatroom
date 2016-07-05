@@ -19,7 +19,7 @@ app.config(function($stateProvider, $urlRouterProvider,$mdThemingProvider) {
 						socket.emit("addMessage", {"message": $scope.message, "nickname": $scope.nickname, "received": $scope.chater});
 						if (!$scope.privateMessages[$scope.chater])
 							$scope.privateMessages[$scope.chater] = [];
-						$scope.privateMessages[$scope.chater].push($scope.message);
+						$scope.privateMessages[$scope.chater].push({message: $scope.message, nickname: $scope.nickname});
 						$scope.message = "";
 						$scope.update();
 						return;
@@ -31,10 +31,12 @@ app.config(function($stateProvider, $urlRouterProvider,$mdThemingProvider) {
 				}
 				socket.on("Message", function(data) {
 					$scope.$apply(function() {
-						if(data.received) {
-							if(!$scope.privateMessages[data.received])
-								$scope.privateMessages[data.received] = [];
-							$scope.privateMessages[data.received].push(data.message);
+						if(data.received == $scope.nickname) {
+							console.log("receive message", data);
+							if(!$scope.privateMessages[data.nickname])
+								$scope.privateMessages[data.nickname] = [];
+							$scope.privateMessages[data.nickname].push({message:data.message, nickname: data.nickname});
+							console.log("privateMessages", $scope.privateMessages);
 						}
 						else {
 							$scope.publicMessages.push({message: data.message, nickname: data.nickname});
@@ -54,6 +56,8 @@ app.config(function($stateProvider, $urlRouterProvider,$mdThemingProvider) {
 						$scope.privateMessages[user] = [];
 					$scope.messages = $scope.privateMessages[user];
 					$scope.chater = user;
+					console.log("chater:", $scope.chater);
+					console.log("$scope.messages", $scope.messages);
 				}
 				$scope.update = function() {
 					if ($scope.chater) {
@@ -63,6 +67,17 @@ app.config(function($stateProvider, $urlRouterProvider,$mdThemingProvider) {
 						$scope.messages = $scope.publicMessages;
 					}
 				}
+				socket.on("userRemoved", function(data) {
+					console.log($scope.nickname, "enter");
+					$scope.$apply(function(){
+					for (var i = 0; i < $scope.allUsers.length; i++)
+			      if ($scope.allUsers[i] == data.nickname) {
+			        $scope.allUsers.splice(i, 1);
+			        break;
+			      }
+			    $scope.publicMessages.push({message:"有个玩家离开了聊天室", nickname:"系统"});
+					})
+				})
 			}
 		})
 })
