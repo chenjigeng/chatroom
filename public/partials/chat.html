@@ -1,0 +1,38 @@
+<div layout="row" class="chat">
+	<md-content flex="30">
+		<md-list flex>
+			<md-subheader class="md-no-sticky">在线用户</md-subheader>
+			<md-list-item class="md-1-line" ng-repeat="user in allUsers" ng-if="user!=nickname" ng-click="chatwith(user)">
+				<img ng-src="img/1.jpg" class="md-avatar" ng-if="user!=nickname"/>
+				<div class='md-title' ng-if="user!=nickname">{{user}}</div>
+			</md-list-item>
+		</md-list>
+	</md-content>
+	<md-content layout-padding flex="60">
+		<md-toolbar layout="row" class="md-hue-3">
+			<div class="md-toolbar-tools">
+				<span>聊天室</span>
+			</div>
+		</md-toolbar>
+		<div class="chat-room">
+			<md-list flex layout="column">
+		      <md-list-item class="md-1-line"ng-repeat="mess in messages track by $index">
+		      	<div layout="column">
+		      		<h3>{{ mess.nickname }}:
+		        	<span>{{ mess.message }} </span>
+		        	</h3>
+		        </div>
+		    	</md-list-item>
+		  </md-list>
+		</div>
+	  <md-input-container>
+			<label>信息</label>
+			<input ng-model="message" />
+		</md-input-container>
+		<md-button ng-click="send()" class="md-primary md-raised">确定</md-button>
+	</md-content>
+</div>
+
+<!-- 	<div ng-repeat="message in messages track by $index">
+	<span>{{ message }} </span>
+</div> -->
