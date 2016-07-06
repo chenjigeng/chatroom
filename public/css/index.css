@@ -18,7 +18,7 @@
 }
 
 .onlineuser {
-	background-color: RGB(238, 238, 238);
+	background-color: #E0E0E0;
 	margin-right: 10px;
 }
 ul {
@@ -42,7 +42,7 @@ ul {
 .onlineuser {
 	padding: 0;
 	margin: 0;
-	border: 1px solid black;
+	border-right: 1px solid #E0E0E0;
 }
 
 .content {
